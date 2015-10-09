@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" type="text/css" href="style.css">
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	<script type="text/javascript" href="yahtzee.js"></script>
+	<title>Yaaaaaaaaaaaaaahtzee</title>
+</head>
+<body>
+	<section id="game">
+		<p id="des_a_lancer"></p>
+		<input id="clickMe" type="button" value="Joue!" onclick="play();" />
+		<select id="PutIt" onchange="submitScore();">
+			<option value="" selected="selected">Make a choice</option>
+			<option value="nb1">1</option>
+			<option value="nb2">2</option>
+			<option value="nb3">3</option>
+			<option value="nb4">4</option>
+			<option value="nb5">5</option>
+			<option value="nb6">6</option>
+			<option value="brelan">Brelan</option>
+			<option value="psuite">Petite suite</option>
+			<option value="gsuite">Grande suite</option>
+			<option value="full">Full</option>
+			<option value="carre">Carré</option>
+			<option value="chance">Chance</option>
+			<option value="yatz">Yahtzee</option>
+		</select>
+	</section>
+	<section id="score_sheet">
+		<table border>
+			<tr><td>Figure</td><td>Score</td></tr>
+			<tr><th>1</th><td id="nb1"></td></tr>
+			<tr><th>2</th><td id="nb2"></td></tr>
+			<tr><th>3</th><td id="nb3"></td></tr>
+			<tr><th>4</th><td id="nb4"></td></tr>
+			<tr><th>5</th><td id="nb5"></td></tr>
+			<tr><th>6</th><td id="nb6"></td></tr>
+			<tr><th>Partie haute</th><td id="score_partie_haute"></td></tr>
+			<tr><th>Brelan</th><td id="nb7"></td></tr>
+			<tr><th>Petite Suite</th><td id="nb8"></td></tr>
+			<tr><th>Grande Suite</th><td id="nb9"></td></tr>
+			<tr><th>Full</th><td id="nb10"></td></tr>
+			<tr><th>Carré</th><td id="nb11"></td></tr>
+			<tr><th>Chance</th><td id="nb12"></td></tr>
+			<tr><th>Yahtzee</th><td id="nb13"></td></tr>
+			<tr><th>Partie basse</th><td id="score_partie_basse"></td></tr>
+			<tr><th>TOTAL</th><td id="total"></td></tr>
+		</table>
+	</section>
+
+
+<script>
+	var des_init = [0,0,0,0,0];
+	window.onload = affichageDes(des_init);
+
+	function play() {
+		var des = lancerDes();
+		affichageDes(des);
+	}
+
+	function lancerDes() {
+		var des = [];
+		for (var i=0; i<5; i++) {
+			des = des.concat(Math.floor((Math.random() * 6)) + 1); 
+		};
+		return des;
+	}
+
+	function affichageDes(des) {
+		document.getElementById("des_a_lancer").innerHTML = des;
+	}
+
+	function submitScore() {
+		var score = 0;
+		var id_score = "";
+		var des=document.getElementById("des_a_lancer").innerHTML;
+		des = JSON.parse("[" + des + "]");
+		var choice = document.getElementById("PutIt").selectedIndex;
+		var id_score = idResult(choice);
+		if (choice == 0) {
+			alert("Beh, vous n'avez rien choisi");
+		} else if (choice < 7) {
+			score = scorePartieHaute(choice, des);
+		} else {
+			if (choice == 7){score = brelan(des);}
+			else if (choice == 8){score = 30;}
+			else if (choice == 9){score = 40;}
+			else if (choice == 10){score = 25;}
+			else if (choice == 11){score = brelan(des);}
+			else if (choice == 12){score = brelan(des);}
+			else { score = 50;}
+		}
+		affichageScore(score, id_score);
+	}
+
+	function scorePartieHaute(number, des) {
+		var score = 0;
+		des.forEach(function(de){
+			if (de == number) {
+				score = score + de;
+			}
+		});
+		return score;
+	}
+
+	function idResult(number) {
+		return "nb"+number.toString();
+	}
+
+	function affichageScore(score, id_score) {
+		document.getElementById(id_score).innerHTML = score;
+	}
+
+	function brelan(des){
+		var score = 0;
+		des.forEach(function(de){
+			score = score + de;
+		})
+		return score;
+	}
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+section {
+	display: flex;
+}
+#clickMe {
+	margin-left: 15px;
+}
