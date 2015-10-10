@@ -12,6 +12,8 @@
 <body>
 	<section id="game">
 		<p id="des_a_lancer"></p>
+		<select id="PutItTest" onchange="submitScore();"></select>
+
 		<input id="clickMe" type="button" value="Joue!" onclick="play();" />
 		<select id="PutIt" onchange="submitScore();">
 			<option value="" selected="selected">Make a choice</option>
@@ -56,6 +58,7 @@
 <script>
 	var des_init = [0,0,0,0,0];
 	window.onload = affichageDes(des_init);
+	window.onload = populateSelect('PutItTest',12,100);
 
 	function play() {
 		var des = lancerDes();
@@ -122,6 +125,44 @@
 		})
 		return score;
 	}
+	function populateSelect(target, min, max){
+		var categories = {"nb1" : "1",
+  						"nb2": "2",
+  						"nb3": "3",
+  						"nb4": "4",
+  						"nb5": "5",
+  						"nb6": "6",
+    					"brelan": "Brelan",
+ 						"psuite": "Petite suite",
+ 						"gsuite": "Grande suite",
+ 						"full": "Full",
+ 						"carre": "Carré",
+ 						"chance": "Chance",
+ 						"yatz": "Yaaaaahtzee"
+ 						}
+
+	    if (!target){
+	        return false;
+	    }
+	    else {
+	        var min = min || 0,
+	            max = max || min + 100;
+
+	        select = document.getElementById(target);
+
+	        for (var i = min; i<=max; i++){
+	            var opt = document.createElement('option');
+	            opt.value = i;
+	            opt.innerHTML = i;
+	            opt.onclick = console.log('click');
+	            select.appendChild(opt);
+	        }
+	    }
+	}
+
+
+
+
 </script>
 
 
