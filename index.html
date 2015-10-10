@@ -145,29 +145,16 @@
 	        return false;
 	    }
 	    else {
-	        var min = min || 0,
-	            max = max || min + 100;
-
 	        select = document.getElementById(target);
+	    	for (var key in categories) {
+	    		var opt = document.createElement('option');
+	    		opt.value = key;
+	    		opt.innerHTML = categories[key]
+	    		select.appendChild(opt);
+	    	}
 
-	        for (var i = min; i<=max; i++){
-	            var opt = document.createElement('option');
-	            opt.value = i;
-	            opt.innerHTML = i;
-	            opt.onclick = console.log('click');
-	            select.appendChild(opt);
-	        }
 	    }
 	}
-
-
-
-
 </script>
-
-
-
-
-
 </body>
 </html>
