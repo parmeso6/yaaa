@@ -12,24 +12,9 @@
 <body>
 	<section id="game">
 		<p id="des_a_lancer"></p>
-		<select id="PutItTest" onchange="submitScore();"></select>
-
 		<input id="clickMe" type="button" value="Joue!" onclick="play();" />
 		<select id="PutIt" onchange="submitScore();">
 			<option value="" selected="selected">Make a choice</option>
-			<option value="nb1">1</option>
-			<option value="nb2">2</option>
-			<option value="nb3">3</option>
-			<option value="nb4">4</option>
-			<option value="nb5">5</option>
-			<option value="nb6">6</option>
-			<option value="brelan">Brelan</option>
-			<option value="psuite">Petite suite</option>
-			<option value="gsuite">Grande suite</option>
-			<option value="full">Full</option>
-			<option value="carre">Carré</option>
-			<option value="chance">Chance</option>
-			<option value="yatz">Yahtzee</option>
 		</select>
 	</section>
 	<section id="score_sheet">
@@ -42,13 +27,13 @@
 			<tr><th>5</th><td id="nb5"></td></tr>
 			<tr><th>6</th><td id="nb6"></td></tr>
 			<tr><th>Partie haute</th><td id="score_partie_haute"></td></tr>
-			<tr><th>Brelan</th><td id="nb7"></td></tr>
-			<tr><th>Petite Suite</th><td id="nb8"></td></tr>
-			<tr><th>Grande Suite</th><td id="nb9"></td></tr>
-			<tr><th>Full</th><td id="nb10"></td></tr>
-			<tr><th>Carré</th><td id="nb11"></td></tr>
-			<tr><th>Chance</th><td id="nb12"></td></tr>
-			<tr><th>Yahtzee</th><td id="nb13"></td></tr>
+			<tr><th>Brelan</th><td id="brelan"></td></tr>
+			<tr><th>Petite Suite</th><td id="psuite"></td></tr>
+			<tr><th>Grande Suite</th><td id="gsuite"></td></tr>
+			<tr><th>Full</th><td id="full"></td></tr>
+			<tr><th>Carré</th><td id="carre"></td></tr>
+			<tr><th>Chance</th><td id="chance"></td></tr>
+			<tr><th>Yahtzee</th><td id="yatz"></td></tr>
 			<tr><th>Partie basse</th><td id="score_partie_basse"></td></tr>
 			<tr><th>TOTAL</th><td id="total"></td></tr>
 		</table>
@@ -58,7 +43,7 @@
 <script>
 	var des_init = [0,0,0,0,0];
 	window.onload = affichageDes(des_init);
-	window.onload = populateSelect('PutItTest',12,100);
+	window.onload = populateSelect('PutIt');
 
 	function play() {
 		var des = lancerDes();
@@ -82,9 +67,8 @@
 		var id_score = "";
 		var des=document.getElementById("des_a_lancer").innerHTML;
 		des = JSON.parse("[" + des + "]");
-		var choice = document.getElementById("PutIt").selectedIndex;
-		var id_score = idResult(choice);
-		if (choice == 0) {
+		var choice = document.getElementById("PutIt").value;
+		if (choice == "brelan") {
 			alert("Beh, vous n'avez rien choisi");
 		} else if (choice < 7) {
 			score = scorePartieHaute(choice, des);
@@ -97,7 +81,7 @@
 			else if (choice == 12){score = brelan(des);}
 			else { score = 50;}
 		}
-		affichageScore(score, id_score);
+		affichageScore(score, choice);
 	}
 
 	function scorePartieHaute(number, des) {
@@ -108,10 +92,6 @@
 			}
 		});
 		return score;
-	}
-
-	function idResult(number) {
-		return "nb"+number.toString();
 	}
 
 	function affichageScore(score, id_score) {
@@ -125,7 +105,7 @@
 		})
 		return score;
 	}
-	function populateSelect(target, min, max){
+	function populateSelect(target){
 		var categories = {"nb1" : "1",
   						"nb2": "2",
   						"nb3": "3",
@@ -147,12 +127,13 @@
 	    else {
 	        select = document.getElementById(target);
 	    	for (var key in categories) {
+	    		if (key == "full" || key == "yatz"){
 	    		var opt = document.createElement('option');
 	    		opt.value = key;
-	    		opt.innerHTML = categories[key]
+	    		opt.innerHTML = categories[key];
 	    		select.appendChild(opt);
+	    		}
 	    	}
-
 	    }
 	}
 </script>
