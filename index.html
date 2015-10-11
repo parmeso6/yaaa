@@ -6,7 +6,7 @@
 		<!--[if lt IE 9]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-	<script type="text/javascript" href="yahtzee.js"></script>
+	<script type="text/javascript" src="yahtzee.js"></script>
 	<title>Yaaaaaaaaaaaaaahtzee</title>
 </head>
 <body>
@@ -40,102 +40,6 @@
 	</section>
 
 
-<script>
-	var des_init = [0,0,0,0,0];
-	window.onload = affichageDes(des_init);
-	window.onload = populateSelect('PutIt');
-
-	function play() {
-		var des = lancerDes();
-		affichageDes(des);
-	}
-
-	function lancerDes() {
-		var des = [];
-		for (var i=0; i<5; i++) {
-			des = des.concat(Math.floor((Math.random() * 6)) + 1); 
-		};
-		return des;
-	}
-
-	function affichageDes(des) {
-		document.getElementById("des_a_lancer").innerHTML = des;
-	}
-
-	function submitScore() {
-		var score = 0;
-		var id_score = "";
-		var des=document.getElementById("des_a_lancer").innerHTML;
-		des = JSON.parse("[" + des + "]");
-		var choice = document.getElementById("PutIt").value;
-		if (choice == "brelan") {
-			alert("Beh, vous n'avez rien choisi");
-		} else if (choice < 7) {
-			score = scorePartieHaute(choice, des);
-		} else {
-			if (choice == 7){score = brelan(des);}
-			else if (choice == 8){score = 30;}
-			else if (choice == 9){score = 40;}
-			else if (choice == 10){score = 25;}
-			else if (choice == 11){score = brelan(des);}
-			else if (choice == 12){score = brelan(des);}
-			else { score = 50;}
-		}
-		affichageScore(score, choice);
-	}
-
-	function scorePartieHaute(number, des) {
-		var score = 0;
-		des.forEach(function(de){
-			if (de == number) {
-				score = score + de;
-			}
-		});
-		return score;
-	}
-
-	function affichageScore(score, id_score) {
-		document.getElementById(id_score).innerHTML = score;
-	}
-
-	function brelan(des){
-		var score = 0;
-		des.forEach(function(de){
-			score = score + de;
-		})
-		return score;
-	}
-	function populateSelect(target){
-		var categories = {"nb1" : "1",
-  						"nb2": "2",
-  						"nb3": "3",
-  						"nb4": "4",
-  						"nb5": "5",
-  						"nb6": "6",
-    					"brelan": "Brelan",
- 						"psuite": "Petite suite",
- 						"gsuite": "Grande suite",
- 						"full": "Full",
- 						"carre": "Carré",
- 						"chance": "Chance",
- 						"yatz": "Yaaaaahtzee"
- 						}
-
-	    if (!target){
-	        return false;
-	    }
-	    else {
-	        select = document.getElementById(target);
-	    	for (var key in categories) {
-	    		if (key == "full" || key == "yatz"){
-	    		var opt = document.createElement('option');
-	    		opt.value = key;
-	    		opt.innerHTML = categories[key];
-	    		select.appendChild(opt);
-	    		}
-	    	}
-	    }
-	}
-</script>
+	
 </body>
 </html>
