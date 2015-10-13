@@ -3,17 +3,26 @@ window.onload = function() {
 	populateSelect('PutIt');
 }
 
+var lancer = 0;
+
 function new_tour(tour) {
 	var des_init = [" - "," - "," - "," - "," - "];
 	affichageDes(des_init);
 	if (tour == 1) {
 		alert("finito");
-	} 
+	}
+	lancer = 0; 
 }
 
 function play() {
-	var des = lancerDes();
-	affichageDes(des);
+	lancer += 1;
+	console.log(lancer)
+	if (lancer < 4) {
+		var des = lancerDes();
+		affichageDes(des);
+	} else {
+		alert("N'essaye pas de tricher");
+	}
 }
 
 function lancerDes() {
