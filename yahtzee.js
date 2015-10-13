@@ -1,7 +1,29 @@
+var Person = Class.create();
+Person.prototype = {
+  initialize: function(name) {
+    this.name = name;
+  },
+  say: function(message) {
+    return this.name + ': ' + message;
+  }
+};
+    
+
+
 window.onload = function() {
-	var des_init = [0,0,0,0,0];
-	affichageDes(des_init);
+	new_tour(14);
 	populateSelect('PutIt');
+	var guy = new Person('Miro');
+	guy.say('hi');
+	// -> "Miro: hi"
+}
+
+function new_tour(tour) {
+	var des_init = [" - "," - "," - "," - "," - "];
+	affichageDes(des_init);
+	if (tour == 1) {
+		alert("finito");
+	} 
 }
 
 function play() {
@@ -21,36 +43,32 @@ function affichageDes(des) {
 	document.getElementById("des_a_lancer").innerHTML = des;
 }
 
-
-var selectmenu=document.getElementById("mymenu")
-selectmenu.onchange=function(){ //run some code when "onchange" event fires
- var chosenoption=this.options[this.selectedIndex] //this refers to "selectmenu"
- if (chosenoption.value!="nothing"){
-  window.open(chosenoption.value, "", "") //open target site (based on option's value attr) in new window
- }
-}
-
 function submitScore() {
-	var score = 0;
 	var des=document.getElementById("des_a_lancer").innerHTML;
 	des = JSON.parse("[" + des + "]").sort();
 	var choice = document.getElementById("PutIt").value;
-	console.log(choice);
-	if (choice == "brelan") {
-		alert("Beh, vous n'avez rien choisi");
-	} else if (choice < 7) {
-		score = scorePartieHaute(choice, des);
-	} else {
-		if (choice == 7){score = brelan(des);}
-		else if (choice == 8){score = 30;}
-		else if (choice == 9){score = 40;}
-		else if (choice == 10){score = 25;}
-		else if (choice == 11){score = brelan(des);}
-		else if (choice == 12){score = brelan(des);}
-		else { score = 50;}
-	}
+	var score = calculateScore(des, choice);
 	affichageScore(score, choice);
 	unpopulateSelect('PutIt');
+	var tour = document.getElementById("PutIt").options.length;
+	new_tour(tour);
+}
+
+function calculateScore(des, cat) {
+	var score = 12;
+	if (cat.indexOf("nb" > -1)) {
+		var number = cat.replace("nb", "");
+		var score = scorePartieHaute(number, des);
+	} else {
+		if (cat == 7){score = brelan(des);}
+		else if (cat == 8){score = 30;}
+		else if (cat == 9){score = 40;}
+		else if (cat == 10){score = 25;}
+		else if (cat == 11){score = brelan(des);}
+		else if (cat == 12){score = brelan(des);}
+		else { score = 50;}
+	}
+	return score;
 }
 
 function scorePartieHaute(number, des) {
@@ -105,7 +123,6 @@ function populateSelect(target) {
     		var opt = document.createElement('option');
     		opt.value = key;
     		opt.innerHTML = categories[key];
-    		opt.onselect = console.log("click sur"+opt.value.toString());
     		select.appendChild(opt);
     	}
     }
