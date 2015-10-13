@@ -1,8 +1,12 @@
+window.onload = function() {
+	var des_init = [0,0,0,0,0];
+	affichageDes(des_init);
+	populateSelect('PutIt');
+}
+
 function play() {
-	unpopulateSelect('PutIt');
 	var des = lancerDes();
 	affichageDes(des);
-	populateSelect('PutIt', des);
 }
 
 function lancerDes() {
@@ -17,12 +21,21 @@ function affichageDes(des) {
 	document.getElementById("des_a_lancer").innerHTML = des;
 }
 
+
+var selectmenu=document.getElementById("mymenu")
+selectmenu.onchange=function(){ //run some code when "onchange" event fires
+ var chosenoption=this.options[this.selectedIndex] //this refers to "selectmenu"
+ if (chosenoption.value!="nothing"){
+  window.open(chosenoption.value, "", "") //open target site (based on option's value attr) in new window
+ }
+}
+
 function submitScore() {
 	var score = 0;
-	var id_score = "";
 	var des=document.getElementById("des_a_lancer").innerHTML;
-	des = JSON.parse("[" + des + "]");
+	des = JSON.parse("[" + des + "]").sort();
 	var choice = document.getElementById("PutIt").value;
+	console.log(choice);
 	if (choice == "brelan") {
 		alert("Beh, vous n'avez rien choisi");
 	} else if (choice < 7) {
@@ -37,6 +50,7 @@ function submitScore() {
 		else { score = 50;}
 	}
 	affichageScore(score, choice);
+	unpopulateSelect('PutIt');
 }
 
 function scorePartieHaute(number, des) {
@@ -67,6 +81,7 @@ function createSelect(value, texte) {
 		select.appendChild(opt);
 }
 
+function populateSelect(target) {
 	var categories = {"nb1" : "1",
 						"nb2": "2",
 						"nb3": "3",
@@ -81,42 +96,29 @@ function createSelect(value, texte) {
 						"chance": "Chance",
 						"yatz": "Yaaaaahtzee"
 						}
-function populateSelect(target, des) {
-    select = document.getElementById(target);
-	
-	for (var i=1; i<7; i++) {
-		var cat = "nb"+i.toString();
-		if (is_empty(cat)){
-			var opt = document.createElement('option');
-				opt.value = cat;
-				opt.innerHTML = i;
-				select.appendChild(opt);
-		}
-	}
-
-    sorted_des = des.sort();
-    if (is_brelan(sorted_des) && is_empty("brelan")) {
-    	console.log("dans brelan");
-    	createSelect("brelan", "Brelan");
+	if (!target){
+        return false;
     }
-	if (is_psuite(sorted_des) && is_empty("psuite")) {
-    	createSelect("psuite", "Petite suite");
+    else {
+        select = document.getElementById(target);
+    	for (var key in categories) {
+    		var opt = document.createElement('option');
+    		opt.value = key;
+    		opt.innerHTML = categories[key];
+    		opt.onselect = console.log("click sur"+opt.value.toString());
+    		select.appendChild(opt);
+    	}
     }
-    if (is_gsuite(sorted_des) && is_empty("gsuite")) {
-    	createSelect("gsuite", "Grande suite");
+}
+function unpopulateSelect(target) {
+	if (!target){
+        return false;
     }
-    if (is_full(sorted_des) && is_empty("full")) {
-    	createSelect("full", "Full");
+    else {
+    	var select = document.getElementById(target);
+    	var chosenoption = select.options[select.selectedIndex];
+    	select.removeChild(chosenoption);
     }
-    if (is_carre(sorted_des) && is_empty("carre")) {
-    	createSelect("carre", "Carré");
-    }
-    if (is_yatz(sorted_des) && is_empty("yatz")) {
-    	createSelect("yatz", "Yaaaaahtzee");
-    }
-    if (is_empty("chance")) {
-    	createSelect("chance", "Chance");
-    } 
 }
 
 function is_empty(cat) {
@@ -184,8 +186,4 @@ function is_yatz(des) {
 		response = true;
 	}
 	return response;
-}
-
-function unpopulateSelect(target) {
-
 }
