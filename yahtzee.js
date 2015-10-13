@@ -1,21 +1,6 @@
-var Person = Class.create();
-Person.prototype = {
-  initialize: function(name) {
-    this.name = name;
-  },
-  say: function(message) {
-    return this.name + ': ' + message;
-  }
-};
-    
-
-
 window.onload = function() {
 	new_tour(14);
 	populateSelect('PutIt');
-	var guy = new Person('Miro');
-	guy.say('hi');
-	// -> "Miro: hi"
 }
 
 function new_tour(tour) {
@@ -55,18 +40,25 @@ function submitScore() {
 }
 
 function calculateScore(des, cat) {
-	var score = 12;
-	if (cat.indexOf("nb" > -1)) {
+	var score = 0
+	if (cat.indexOf("nb") > -1) {
 		var number = cat.replace("nb", "");
 		var score = scorePartieHaute(number, des);
-	} else {
-		if (cat == 7){score = brelan(des);}
-		else if (cat == 8){score = 30;}
-		else if (cat == 9){score = 40;}
-		else if (cat == 10){score = 25;}
-		else if (cat == 11){score = brelan(des);}
-		else if (cat == 12){score = brelan(des);}
-		else { score = 50;}
+	} else if (cat == "chance") {
+		score = sommeDes(des);
+	} else if (cat == "yatz" && is_yatz(des)) {
+		score = 50;
+	} else if (cat == "full" && is_full(des)) {
+		score = 25;
+	} else if (cat == "gsuite" && is_gsuite(des)) {
+		score = 40;
+	} else if (cat == "psuite" && is_psuite(des)) {
+		score = 30;
+	} else if (cat == "carre" && is_carre(des)) {
+		score = sommeDes(des);
+	} else if (cat == "brelan" && (is_brelan(des) != 0)) {
+		console.log('est un brelan');
+		score = sommeDes(des);
 	}
 	return score;
 }
@@ -78,6 +70,14 @@ function scorePartieHaute(number, des) {
 			score = score + de;
 		}
 	});
+	return score;
+}
+
+function sommeDes(des) {
+	var score = 0;
+	des.forEach(function(de){
+		score = score + de;
+	})
 	return score;
 }
 
@@ -136,15 +136,6 @@ function unpopulateSelect(target) {
     	var chosenoption = select.options[select.selectedIndex];
     	select.removeChild(chosenoption);
     }
-}
-
-function is_empty(cat) {
-	var case_grille = document.getElementById(cat);
-	var is_empty = true;
-	if (case_grille == ""){
-		is_empty = false;
-	}
-	return is_empty;
 }
 
 function is_brelan(des) {
