@@ -4,19 +4,25 @@ window.onload = function() {
 }
 
 var lancer = 0;
+var score_partie_haute = 0;
+var score_partie_basse = 0;
 
 function new_tour(tour) {
 	var des_init = [" - "," - "," - "," - "," - "];
 	affichageDes(des_init);
 	if (tour == 1) {
-		alert("finito");
+		if (score_partie_haute > 62) {
+			score_partie_haute += 35;
+		}
+		var score_final = score_partie_haute + score_partie_basse
+		document.getElementById("total").innerHTML = score_final;
+		alert("Finito, vous avez " + score_final + "points");
 	}
 	lancer = 0; 
 }
 
 function play() {
 	lancer += 1;
-	console.log(lancer)
 	if (lancer < 4) {
 		var des = lancerDes();
 		affichageDes(des);
@@ -53,21 +59,24 @@ function calculateScore(des, cat) {
 	if (cat.indexOf("nb") > -1) {
 		var number = cat.replace("nb", "");
 		var score = scorePartieHaute(number, des);
-	} else if (cat == "chance") {
-		score = sommeDes(des);
-	} else if (cat == "yatz" && is_yatz(des)) {
-		score = 50;
-	} else if (cat == "full" && is_full(des)) {
-		score = 25;
-	} else if (cat == "gsuite" && is_gsuite(des)) {
-		score = 40;
-	} else if (cat == "psuite" && is_psuite(des)) {
-		score = 30;
-	} else if (cat == "carre" && is_carre(des)) {
-		score = sommeDes(des);
-	} else if (cat == "brelan" && (is_brelan(des) != 0)) {
-		console.log('est un brelan');
-		score = sommeDes(des);
+		score_partie_haute += score;
+	} else {
+		if (cat == "chance") {
+			score = sommeDes(des);
+		} else if (cat == "yatz" && is_yatz(des)) {
+			score = 50;
+		} else if (cat == "full" && is_full(des)) {
+			score = 25;
+		} else if (cat == "gsuite" && is_gsuite(des)) {
+			score = 40;
+		} else if (cat == "psuite" && is_psuite(des)) {
+			score = 30;
+		} else if (cat == "carre" && is_carre(des)) {
+			score = sommeDes(des);
+		} else if (cat == "brelan" && (is_brelan(des) != 0)) {
+			score = sommeDes(des);
+		}
+		score_partie_basse += score;
 	}
 	return score;
 }
@@ -92,6 +101,8 @@ function sommeDes(des) {
 
 function affichageScore(score, id_score) {
 	document.getElementById(id_score).innerHTML = score;
+	document.getElementById("score_partie_haute").innerHTML = score_partie_haute;
+	document.getElementById("score_partie_basse").innerHTML = score_partie_basse;
 }
 
 function brelan(des){
